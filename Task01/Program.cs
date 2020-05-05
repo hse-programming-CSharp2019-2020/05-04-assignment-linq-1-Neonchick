@@ -46,8 +46,9 @@ namespace Task01
             try
             {
                 // Попробуйте осуществить считывание целочисленного массива, записав это ОДНИМ ВЫРАЖЕНИЕМ.
-                arr = (from s in Regex.Replace(Console.ReadLine(), "[ ]+", " ").Split()
+                arr = (from s in Regex.Replace(Console.ReadLine(), "[ ]+", " ").Trim().Split()
                        select int.Parse(s)).ToArray();
+                
                 if (arr.Length == 0)
                     throw new InvalidOperationException();
             }
@@ -80,8 +81,11 @@ namespace Task01
                 PrintEnumerableCollection<int>(arrQuery, ":");
                 PrintEnumerableCollection<int>(arrMethod, "*");
             }
-            catch (Exception)
-            { }
+            catch (InvalidOperationException)
+            {
+                Console.WriteLine("InvalidOperationException");
+                return;
+            }
         }
 
         // Попробуйте осуществить вывод элементов коллекции с учетом разделителя, записав это ОДНИМ ВЫРАЖЕНИЕМ.

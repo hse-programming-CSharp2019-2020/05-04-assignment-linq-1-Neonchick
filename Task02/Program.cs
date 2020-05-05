@@ -70,21 +70,27 @@ namespace Task02
                 return;
             }
 
-            var filteredCollection = arr.TakeWhile<int>(x => x != 0).ToArray().Select<int, string>(x => x.ToString());
+            var filteredCollection = arr.TakeWhile<int>(x => x != 0);
            
             try
             {
                 // использовать статическую форму вызова метода подсчета среднего
-                double averageUsingStaticForm = System.Linq.Enumerable.Average(arr);
+                double averageUsingStaticForm = System.Linq.Enumerable.Average(filteredCollection.Select((x) => x * x));
                 // использовать объектную форму вызова метода подсчета среднего
-                double averageUsingInstanceForm = arr.Average();
+                double averageUsingInstanceForm = filteredCollection.Select((x) => x * x).Average();
 
                 // Выведем среднее.
                 Console.WriteLine($"{averageUsingStaticForm:f3}");
                 Console.WriteLine($"{averageUsingInstanceForm:f3}");
 
                 // вывести элементы коллекции в одну строку
-                Console.WriteLine(filteredCollection.Aggregate((x, y) => x + ' ' + y));
+                Console.WriteLine(filteredCollection.ToArray().Select<int, string>(x => x.ToString()).Aggregate((x, y) => x + ' ' + y));
+            }
+            // Проверка переполнения.
+            catch (OverflowException)
+            {
+                Console.WriteLine("OverflowException");
+                return;
             }
             // Проверка пустоты.
             catch (InvalidOperationException)

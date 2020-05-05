@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 /* В задаче не использовать циклы for, while. Все действия по обработке данных выполнять с использованием LINQ
  * 
@@ -42,6 +40,7 @@ namespace Task01
 
         public static void RunTesk01()
         {
+            // Присвоим arr какое-то значение, так как нормальное присваивание в try блоке.
             int[] arr = null;
             try
             {
@@ -49,19 +48,23 @@ namespace Task01
                 arr = (from s in Regex.Replace(Console.ReadLine(), "[ ]+", " ").Trim().Split()
                        select int.Parse(s)).ToArray();
                 
+                // Проверка на пустой массив.
                 if (arr.Length == 0)
                     throw new InvalidOperationException();
             }
+            // Проверка формата.
             catch (FormatException)
             {
                 Console.WriteLine("FormatException");
                 return;
             }
+            // Проверка переполнения.
             catch (OverflowException)
             {
                 Console.WriteLine("OverflowException");
                 return;
             }
+            // Проверка пустоты.
             catch (InvalidOperationException)
             {
                 Console.WriteLine("InvalidOperationException");
@@ -78,9 +81,11 @@ namespace Task01
 
             try
             {
+                // Выводим два раза.
                 PrintEnumerableCollection<int>(arrQuery, ":");
                 PrintEnumerableCollection<int>(arrMethod, "*");
             }
+            // Проверка пустоты.
             catch (InvalidOperationException)
             {
                 Console.WriteLine("InvalidOperationException");
@@ -92,7 +97,7 @@ namespace Task01
         // P.S. Есть два способа, оставьте тот, в котором применяется LINQ...
         public static void PrintEnumerableCollection<T>(IEnumerable<T> collection, string separator)
         {
-            Console.WriteLine(Array.ConvertAll<T, string>(collection.ToArray(), (x) => x.ToString()).Aggregate((x, y) => x + separator + y));
+            Console.WriteLine(collection.Select<T, string>(x => x.ToString()).Aggregate((x, y) => x + separator + y));
         }
     }
 }

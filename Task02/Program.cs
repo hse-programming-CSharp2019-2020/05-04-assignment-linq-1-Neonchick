@@ -39,6 +39,9 @@ namespace Task02
 
         public static void RunTesk02()
         {
+            // Переключаем локаль, чтоб была не точка, а запятая в вещественных числах.
+            System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("ru");
+
             // Присвоим arr какое-то значение, так как нормальное присваивание в try блоке.
             int[] arr = null;
             try
@@ -75,7 +78,7 @@ namespace Task02
             try
             {
                 // использовать статическую форму вызова метода подсчета среднего
-                double averageUsingStaticForm = System.Linq.Enumerable.Average(filteredCollection.Select((x) => x * x));
+                double averageUsingStaticForm = System.Linq.Enumerable.Average(filteredCollection.Select((x) => checked (x * x)));
                 // использовать объектную форму вызова метода подсчета среднего
                 double averageUsingInstanceForm = filteredCollection.Select((x) => x * x).Average();
 

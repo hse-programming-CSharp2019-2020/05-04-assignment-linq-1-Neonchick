@@ -52,11 +52,20 @@ namespace Task01
                     throw new InvalidOperationException();
             }
             catch (FormatException)
-            { Console.WriteLine("FormatException"); }
+            {
+                Console.WriteLine("FormatException");
+                return;
+            }
             catch (OverflowException)
-            { Console.WriteLine("OverflowException"); }
+            {
+                Console.WriteLine("OverflowException");
+                return;
+            }
             catch (InvalidOperationException)
-            { Console.WriteLine("InvalidOperationException"); }
+            {
+                Console.WriteLine("InvalidOperationException");
+                return;
+            }
 
             // использовать синтаксис запросов!
             IEnumerable<int> arrQuery = from el in arr
@@ -79,7 +88,7 @@ namespace Task01
         // P.S. Есть два способа, оставьте тот, в котором применяется LINQ...
         public static void PrintEnumerableCollection<T>(IEnumerable<T> collection, string separator)
         {
-            Console.WriteLine(Array.ConvertAll<T,string>(collection.ToArray(), (x) => x.ToString()).Aggregate((x, y) => x + separator + y));
+            Console.WriteLine(Array.ConvertAll<T, string>(collection.ToArray(), (x) => x.ToString()).Aggregate((x, y) => x + separator + y));
         }
     }
 }

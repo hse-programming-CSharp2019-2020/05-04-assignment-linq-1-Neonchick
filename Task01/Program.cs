@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 /* В задаче не использовать циклы for, while. Все действия по обработке данных выполнять с использованием LINQ
@@ -41,32 +42,44 @@ namespace Task01
 
         public static void RunTesk01()
         {
-            int[] arr;
+            int[] arr = null;
             try
             {
                 // Попробуйте осуществить считывание целочисленного массива, записав это ОДНИМ ВЫРАЖЕНИЕМ.
-                arr = 
+                arr = (from s in Regex.Replace(Console.ReadLine(), "[ ]+", " ").Split()
+                       select int.Parse(s)).ToArray();
+                if (arr.Length == 0)
+                    throw new InvalidOperationException();
             }
-            
+            catch (FormatException)
+            { Console.WriteLine("FormatException"); }
+            catch (OverflowException)
+            { Console.WriteLine("OverflowException"); }
+            catch (InvalidOperationException)
+            { Console.WriteLine("InvalidOperationException"); }
+
             // использовать синтаксис запросов!
-            IEnumerable<int> arrQuery = from 
+            IEnumerable<int> arrQuery = from el in arr
+                                        where (el < 0 || el % 2 == 0)
+                                        select el;
 
             // использовать синтаксис методов!
-            IEnumerable<int> arrMethod = arr.
+            IEnumerable<int> arrMethod = arr.Where<int>(el => (el < 0 || el % 2 == 0));
 
             try
             {
                 PrintEnumerableCollection<int>(arrQuery, ":");
                 PrintEnumerableCollection<int>(arrMethod, "*");
             }
+            catch (Exception)
+            { }
         }
 
         // Попробуйте осуществить вывод элементов коллекции с учетом разделителя, записав это ОДНИМ ВЫРАЖЕНИЕМ.
         // P.S. Есть два способа, оставьте тот, в котором применяется LINQ...
         public static void PrintEnumerableCollection<T>(IEnumerable<T> collection, string separator)
         {
-           
-           
+            Console.WriteLine(Array.ConvertAll<T,string>(collection.ToArray(), (x) => x.ToString()).Aggregate((x, y) => x + separator + y));
         }
     }
 }

@@ -80,7 +80,7 @@ namespace Task03
             var computerInfoQuery = from el in computerInfoList
                                     orderby el.Owner descending,
                                     el.ComputerManufacturer.ToString(),
-                                    el.Year
+                                    el.Year descending
                                     select el;
 
             PrintCollectionInOneLine(computerInfoQuery);
@@ -89,7 +89,7 @@ namespace Task03
 
             // выполните сортировку одним выражением
             var computerInfoMethods = computerInfoList.OrderByDescending(x => x.Owner)
-                .ThenBy(x => x.ComputerManufacturer.ToString()).ThenBy(x => x.Year);
+                .ThenBy(x => x.ComputerManufacturer.ToString()).ThenByDescending(x => x.Year);
 
             PrintCollectionInOneLine(computerInfoMethods);
 

@@ -15,7 +15,6 @@ using System.Text.RegularExpressions;
  * 
  * Пример выходных:
  * 8
- * 
  * 8
  * 
  * Пояснение:
@@ -74,17 +73,29 @@ namespace Task04
             // Множитель.
             int mn = 1;
 
-            int arrAggregate = arr.Aggregate(delegate (int x, int y)
+            try
             {
-                mn = -mn;
-                return x + y * mn;
-            }) + 5;
+                checked
+                {
+                    int arrAggregate = arr.Aggregate(delegate (int x, int y)
+                    {
+                        mn = -mn;
+                        return x + y * mn;
+                    }) + 5;
 
-            // Собственный класс.
-            int arrMyAggregate = MyClass.MyAggregate(arr);
+                    // Собственный класс.
+                    int arrMyAggregate = MyClass.MyAggregate(arr);
 
-            Console.WriteLine(arrAggregate);
-            Console.WriteLine(arrMyAggregate);
+                    Console.WriteLine(arrAggregate);
+                    Console.WriteLine(arrMyAggregate);
+                }
+            }
+            // Проверка переполнения.
+            catch (OverflowException)
+            {
+                Console.WriteLine("OverflowException");
+                return;
+            }
 
         }
     }

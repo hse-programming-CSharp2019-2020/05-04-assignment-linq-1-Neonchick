@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 /*Все действия по обработке данных выполнять с использованием LINQ
  * 
@@ -54,22 +55,49 @@ namespace Task03
     {
         static void Main(string[] args)
         {
+            // Сменим кодировку.
+            System.Console.OutputEncoding = Encoding.UTF8;
+            System.Console.InputEncoding = Encoding.UTF8;
+
             int N;
+            // Создадим список.
             List<ComputerInfo> computerInfoList = new List<ComputerInfo>();
             try
             {
+                // Считаем колво элементов.
                 N = int.Parse(Console.ReadLine());
 
+                // Считаем элементы.
                 for (int i = 0; i < N; i++)
                 {
                     var str = Console.ReadLine().Split();
+                    // Проверка кол-ва полей.
+                    if (str.Length!=3)
+                        throw new ArgumentException();
                     computerInfoList.Add(new ComputerInfo()
                     {
                         Owner = str[0],
                         Year = int.Parse(str[1]),
                         ComputerManufacturer = (Manufacturer)int.Parse(str[2])
                     });
+                    // Проверка коректности полей.
+                    if (computerInfoList.Last().Year < 1970 || computerInfoList.Last().Year > 2020)
+                        throw new ArgumentException();
+                    if ((int)computerInfoList.Last().ComputerManufacturer < 0 || (int)computerInfoList.Last().ComputerManufacturer > 4)
+                        throw new ArgumentException();
                 }
+            }
+            // Проверка формата.
+            catch (FormatException)
+            {
+                Console.WriteLine("FormatException");
+                return;
+            }
+            // Проверка переполнения.
+            catch (OverflowException)
+            {
+                Console.WriteLine("OverflowException");
+                return;
             }
             catch (ArgumentException)
             {
@@ -83,11 +111,12 @@ namespace Task03
                                     el.Year descending
                                     select el;
 
+            // Вывод колекции.
             PrintCollectionInOneLine(computerInfoQuery);
 
             Console.WriteLine();
 
-            // выполните сортировку одним выражением
+            // Ыыполните сортировку одним выражением.
             var computerInfoMethods = computerInfoList.OrderByDescending(x => x.Owner)
                 .ThenBy(x => x.ComputerManufacturer.ToString()).ThenByDescending(x => x.Year);
 
@@ -95,7 +124,7 @@ namespace Task03
 
         }
 
-        // выведите элементы коллекции на экран с помощью кода, состоящего из одной линии (должна быть одна точка с запятой)
+        // Выведите элементы коллекции на экран с помощью кода, состоящего из одной линии (должна быть одна точка с запятой)
         public static void PrintCollectionInOneLine(IEnumerable<ComputerInfo> collection)
         {
             Console.WriteLine(collection.ToArray().Select<ComputerInfo, string>(x => $"{x.Owner}: {x.ComputerManufacturer.ToString()} [{x.Year}]")
@@ -103,6 +132,9 @@ namespace Task03
         }
     }
 
+    /// <summary>
+    /// Перечисление мануфктур.
+    /// </summary>
     enum Manufacturer
     {
         Dell,
@@ -111,10 +143,22 @@ namespace Task03
         Microsoft
     }
 
+    /// <summary>
+    /// Класс информации о компьютере.
+    /// </summary>
     class ComputerInfo
     {
+        /// <summary>
+        /// Владелец.
+        /// </summary>
         public string Owner { get; set; }
+        /// <summary>
+        /// Мануфактура.
+        /// </summary>
         public Manufacturer ComputerManufacturer { get; set; }
+        /// <summary>
+        /// Год выпуска.
+        /// </summary>
         public int Year { get; set; }
     }
 }

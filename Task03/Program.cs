@@ -54,44 +54,67 @@ namespace Task03
     {
         static void Main(string[] args)
         {
-            int N
+            int N;
             List<ComputerInfo> computerInfoList = new List<ComputerInfo>();
             try
             {
-                N = 
-                
+                N = int.Parse(Console.ReadLine());
+
                 for (int i = 0; i < N; i++)
                 {
-                    
+                    var str = Console.ReadLine().Split();
+                    computerInfoList.Add(new ComputerInfo()
+                    {
+                        Owner = str[0],
+                        Year = int.Parse(str[1]),
+                        ComputerManufacturer = (Manufacturer)int.Parse(str[2])
+                    });
                 }
             }
-           
+            catch (ArgumentException)
+            {
+                Console.WriteLine("ArgumentException");
+            }
 
             // выполните сортировку одним выражением
-            var computerInfoQuery = from 
+            var computerInfoQuery = from el in computerInfoList
+                                    orderby el.Owner descending,
+                                    el.ComputerManufacturer.ToString(),
+                                    el.Year
+                                    select el;
 
             PrintCollectionInOneLine(computerInfoQuery);
 
             Console.WriteLine();
 
             // выполните сортировку одним выражением
-            var computerInfoMethods = computerInfoList.
+            var computerInfoMethods = computerInfoList.OrderByDescending(x => x.Owner)
+                .ThenBy(x => x.ComputerManufacturer.ToString()).ThenBy(x => x.Year);
 
             PrintCollectionInOneLine(computerInfoMethods);
-            
+
         }
 
         // выведите элементы коллекции на экран с помощью кода, состоящего из одной линии (должна быть одна точка с запятой)
         public static void PrintCollectionInOneLine(IEnumerable<ComputerInfo> collection)
         {
+            Console.WriteLine(collection.ToArray().Select<ComputerInfo, string>(x => $"{x.Owner}: {x.ComputerManufacturer.ToString()} [{x.Year}]")
+                .Aggregate((x, y) => x + "\n" + y));
         }
     }
 
+    enum Manufacturer
+    {
+        Dell,
+        Asus,
+        Apple,
+        Microsoft
+    }
 
     class ComputerInfo
     {
         public string Owner { get; set; }
         public Manufacturer ComputerManufacturer { get; set; }
-        
+        public int Year { get; set; }
     }
 }
